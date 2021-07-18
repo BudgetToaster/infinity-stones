@@ -31,7 +31,7 @@ object InfinityStoneScatterer: Listener {
 
     @EventHandler
     fun onBlockBreakEvent(event: BlockBreakEvent) {
-        val stoneTypes = ArrayList(InfinityStone.values).filter { !plugin.stoneLocations.containsKey(it) }
+        val stoneTypes = ArrayList(InfinityStone.values).filter { !InfinityStoneManager.stoneLocations.containsKey(it) }
         if(stoneTypes.isEmpty()) return
         if(!blockWhitelist.contains(event.block.type)) return
         if(event.block.y > maxHeight) return
@@ -45,7 +45,7 @@ object InfinityStoneScatterer: Listener {
             val stoneType = stoneTypes[random.nextInt(stoneTypes.size)]
             val item = stoneType.createItemStack()
             if(event.player.inventory.addItem(item).isEmpty()) {
-                plugin.stoneLocations[stoneType] = event.player
+                InfinityStoneManager.stoneLocations[stoneType] = event.player
             }
         }
     }
