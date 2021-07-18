@@ -3,14 +3,13 @@ plugins {
     id 'com.github.johnrengelman.shadow' version '7.0.0'
 }
 
-group 'com.github.budgettoaster.stones'
+group 'com.github.budgettoaster.infinitystones'
 version '1.0-alpha'
 
 repositories {
     mavenCentral()
     maven { url = 'https://hub.spigotmc.org/nexus/content/repositories/snapshots/' }
     maven { url = 'https://oss.sonatype.org/content/repositories/snapshots' }
-    maven { url = 'https://jitpack.io' }
 }
 
 dependencies {
