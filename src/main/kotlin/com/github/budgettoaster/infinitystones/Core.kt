@@ -20,6 +20,7 @@ class Core: JavaPlugin(), Listener {
 
         BaseCommand.init()
         InfinityStoneManager.startLocationCheckLoop()
+        InfinityStoneManager.load()
         startSaveLoop()
         logger.info("Enabled")
     }
@@ -48,6 +49,7 @@ class Core: JavaPlugin(), Listener {
     }
 
     fun saveAll() {
+        InfinityStoneManager.save()
         logger.info("Saved all data.")
     }
 

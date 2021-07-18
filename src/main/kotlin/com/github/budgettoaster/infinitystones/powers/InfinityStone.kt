@@ -6,14 +6,14 @@ interface InfinityStone {
     companion object {
         val values: List<InfinityStone> = listOf(MindStone, PowerStone, RealityStone, SoulStone, SpaceStone, TimeStone)
 
-        fun fromName(name : String) : InfinityStone? {
+        fun valueOf(name : String) : InfinityStone? {
             return when(name) {
                 "MindStone" -> MindStone
-                "PowerStone" -> MindStone
-                "RealityStone" -> MindStone
-                "SoulStone" -> MindStone
-                "SpaceStone" -> MindStone
-                "TimeStone" -> MindStone
+                "PowerStone" -> PowerStone
+                "RealityStone" -> RealityStone
+                "SoulStone" -> SoulStone
+                "SpaceStone" -> SpaceStone
+                "TimeStone" -> TimeStone
                 else -> null
             }
         }
