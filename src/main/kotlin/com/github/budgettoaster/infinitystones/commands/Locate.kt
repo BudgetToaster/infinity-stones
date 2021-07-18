@@ -1,6 +1,7 @@
 package com.github.budgettoaster.infinitystones.commands
 
 import com.github.budgettoaster.infinitystones.InfinityStoneLocation
+import com.github.budgettoaster.infinitystones.InfinityStoneManager
 import com.github.budgettoaster.infinitystones.plugin
 import org.bukkit.Bukkit
 import org.bukkit.ChatColor
@@ -40,7 +41,7 @@ class Locate : SubCommand(
         }
         else {
             val playerLocation = sender.location
-            val nearestStone = plugin.stoneLocations.entries.maxWithOrNull(Comparator.comparingDouble {
+            val nearestStone = InfinityStoneManager.stoneLocations.entries.maxWithOrNull(Comparator.comparingDouble {
                 if(it.value != sender) it.value.location.distanceSquared(playerLocation) else Double.MIN_VALUE
             })
 

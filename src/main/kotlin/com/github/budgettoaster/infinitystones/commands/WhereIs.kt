@@ -1,6 +1,6 @@
 package com.github.budgettoaster.infinitystones.commands
 
-import com.github.budgettoaster.infinitystones.plugin
+import com.github.budgettoaster.infinitystones.InfinityStoneManager
 import com.github.budgettoaster.infinitystones.powers.*
 import net.md_5.bungee.api.ChatColor
 import org.bukkit.command.CommandSender
@@ -24,7 +24,7 @@ class WhereIs : SubCommand(
             "time" -> TimeStone
             else -> return null
         }
-        val entity = plugin.stoneLocations[type]
+        val entity = InfinityStoneManager.stoneLocations[type]
         return when (entity) {
             null -> "${ChatColor.RED}That infinity stone is not yet in circulation."
             is Player -> "${ChatColor.YELLOW}That infinity stone is held by ${entity.displayName}."
