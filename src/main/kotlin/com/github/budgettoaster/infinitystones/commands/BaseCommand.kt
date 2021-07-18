@@ -9,7 +9,7 @@ import org.bukkit.entity.Player
 import java.text.MessageFormat
 
 object BaseCommand : CommandExecutor {
-    private val subCommands: MutableList<SubCommand> = ArrayList()
+    val subCommands: MutableList<SubCommand> = ArrayList()
 
     fun init() {
         subCommands.add(Locate())
@@ -18,6 +18,7 @@ object BaseCommand : CommandExecutor {
             if (!c.init()) return
         }
         plugin.getCommand("stones")!!.setExecutor(this)
+        plugin.getCommand("stones")!!.tabCompleter = BaseCommandTabCompleter()
     }
 
     override fun onCommand(sender: CommandSender, command: Command, label: String, args: Array<String>): Boolean {
