@@ -12,7 +12,7 @@ class InfinityStoneLocation(
     z: Double
 ) : Location(world, x, y, z) {
     fun update() {
-        val loc = plugin.stoneLocations[stone]?.location ?: return
+        val loc = InfinityStoneManager.stoneLocations[stone]?.location ?: return
         x = loc.x
         y = loc.y
         z = loc.z
