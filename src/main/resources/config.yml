@@ -1,0 +1,23 @@
+# In ticks, 20 ticks in a second.
+reality block lifetime: 50
+
+# When a player mines a block above this level, there is a 0% chance an infinity stone will spawn.
+max infinity stone spawn height: 32
+
+# As a fraction, i.e 0.1 = 10%, and 0.01 = 1%
+infinity stone spawn chance: 0.1
+
+# List of blocks and items here, only use these blocks: https://hub.spigotmc.org/javadocs/bukkit/org/bukkit/Material.html
+holding blocks:
+  - IRON_ORE
+  - GOLD_ORE
+  - DIAMOND_ORE
+  - EMERALD_ORE
+  - COAL_ORE
+  - LAPIS_ORE
+  - NETHER_QUARTZ_ORE
+
+# In milliseconds, this is the delay a player must wait to use a time stone again.
+time stone delay: 5000
+# In seconds, this is the amount of time that is reversed when a player uses a time stone.
+time stone reversal time: 10

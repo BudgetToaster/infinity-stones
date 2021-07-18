@@ -1,0 +1,19 @@
+main: com.github.budgettoaster.infinitystones.Core
+name: InfinityStones
+version: 1.0-alpha
+api-version: 1.17
+description: "Creates infinity stones throughout the multiverse."
+author: BanePig
+
+commands:
+  stones:
+    description: "Base command for infinity stones plugin."
+    usage: "/stones <subcommand>"
+
+permissions:
+  infinitystones.basic.locate:
+    description: "Allows you to locate infinity stones."
+    default: true
+  infinitystones.admin.whereis:
+    description: "Allows you to get the exact location of an infinity stone."
+    default: op
