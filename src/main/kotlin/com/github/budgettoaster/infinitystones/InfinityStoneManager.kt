@@ -66,7 +66,6 @@ object InfinityStoneManager : Listener {
     }
 
     private fun validateLocations() {
-        println(stoneLocations)
         for(entry in HashSet(stoneLocations.entries)) {
             val value = entry.value
             val key = entry.key

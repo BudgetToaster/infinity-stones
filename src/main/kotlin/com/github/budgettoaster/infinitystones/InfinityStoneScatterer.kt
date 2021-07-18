@@ -1,6 +1,5 @@
 package com.github.budgettoaster.infinitystones
 
-import com.fasterxml.jackson.databind.ObjectMapper
 import com.github.budgettoaster.infinitystones.powers.InfinityStone
 import org.bukkit.GameMode
 import org.bukkit.Material
@@ -11,7 +10,6 @@ import org.bukkit.event.block.BlockBreakEvent
 import java.util.*
 
 object InfinityStoneScatterer: Listener {
-    private val mapper = ObjectMapper()
     private var random = Random()
     private val blockWhitelist: ArrayList<Material> = ArrayList()
     private val maxHeight = plugin.config.getInt("max infinity stone spawn height", 32)

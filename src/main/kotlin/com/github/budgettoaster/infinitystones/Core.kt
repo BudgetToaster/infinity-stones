@@ -2,7 +2,9 @@ package com.github.budgettoaster.infinitystones
 
 import com.github.budgettoaster.infinitystones.commands.BaseCommand
 import com.github.budgettoaster.infinitystones.powers.*
+import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
+import org.bukkit.event.world.WorldSaveEvent
 import org.bukkit.plugin.java.JavaPlugin
 import org.bukkit.scheduler.BukkitRunnable
 
@@ -30,7 +32,7 @@ class Core: JavaPlugin(), Listener {
             override fun run() {
                 saveAll()
             }
-        }.runTaskTimer(this, 6000L, 6000)
+        }.runTaskTimer(this, 20*60L, 20*60L)
     }
 
     override fun onDisable() {
@@ -44,13 +46,16 @@ class Core: JavaPlugin(), Listener {
             }
         }
         saveAll()
-        logger.info("Saved data.")
         logger.info("Disabled")
+    }
+
+    @EventHandler
+    fun onWorldSave(ev: WorldSaveEvent) {
+        saveAll()
     }
 
     fun saveAll() {
         InfinityStoneManager.save()
-        logger.info("Saved all data.")
     }
 
     fun registerEvents(vararg listeners: Listener) {
