@@ -66,9 +66,15 @@ object InfinityStoneManager : Listener {
     init {
         plugin.server.scheduler.scheduleSyncRepeatingTask(plugin, {
             for(entry in HashSet(stoneLocations.entries)) {
-                if (entry.value !is Item) continue
-                if(!entry.value.isValid && entry.value.location.chunk.isLoaded) {
-                    stoneLocations.remove(entry.key)
+                if(entry.value is HumanEntity) {
+                    if(!(entry.value as Player).inventory.containsStone(entry.key)) {
+                        stoneLocations.remove(entry.key)
+                    }
+                }
+                if(entry.value is Item) {
+                    if(!entry.value.isValid && entry.value.location.chunk.isLoaded) {
+                        stoneLocations.remove(entry.key)
+                    }
                 }
             }
         }, 20L, 20L)
@@ -129,6 +135,7 @@ object InfinityStoneManager : Listener {
     fun onInventoryClick(ev: InventoryClickEvent) {
         val type = ev.cursor.infinityStoneType ?: return
         if(ev.clickedInventory !is PlayerInventory) ev.isCancelled = true
+        else stoneLocations[type] = ev.whoClicked as Player
     }
 
     @EventHandler
@@ -182,8 +189,8 @@ object InfinityStoneManager : Listener {
     @EventHandler
     fun onItemPickup(ev: InventoryPickupItemEvent) {
         val type = ev.item.itemStack.infinityStoneType ?: return
-        if(ev.inventory.holder is Player) {
-            stoneLocations[type] = ev.inventory.holder as Player
+        if(ev.inventory.holder is HumanEntity) {
+            stoneLocations[type] = ev.inventory.holder as HumanEntity
             save()
         }
         else {
@@ -194,7 +201,7 @@ object InfinityStoneManager : Listener {
     @EventHandler
     fun onItemPickup(ev: EntityPickupItemEvent) {
         val type = ev.item.itemStack.infinityStoneType ?: return
-        if(ev.entity is Player) {
+        if(ev.entity is HumanEntity) {
             stoneLocations[type] = ev.entity as Player
             save()
         }
