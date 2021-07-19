@@ -1,5 +1,6 @@
 package com.github.budgettoaster.infinitystones.powers
 
+import com.github.budgettoaster.infinitystones.InfinityStoneManager
 import com.github.budgettoaster.infinitystones.plugin
 import org.bukkit.ChatColor
 import org.bukkit.Material
@@ -14,36 +15,13 @@ import org.bukkit.scheduler.BukkitRunnable
 
 
 object MindStone: Listener, InfinityStone {
-    private val controlledEntities = HashMap<LivingEntity, Player>()
     override val friendlyName: String
         get() = "Mind Stone"
 
-    init {
-        object: BukkitRunnable() {
-            override fun run() {
-                for(entity in HashMap(controlledEntities)) {
-                    if(entity.key.isValid) controlledEntities.remove(entity.key)
-                }
-            }
-        }.runTaskTimer(plugin, 0L, 6000L)
-    }
-
-    @EventHandler
-    fun onEntityDamage(event: EntityDamageByEntityEvent) {
-        if(!event.entity.isValid) return
-        val inHand = (event.damager as? Player)?.inventory?.itemInMainHand ?: return
-        if(isValid(inHand)) {
-            controlledEntities[event.entity as LivingEntity] = event.damager as Player
-        }
-    }
-
     @EventHandler
     fun onEntityTarget(event: EntityTargetLivingEntityEvent) {
-        if(event.target !is Player) return
-        val controller = controlledEntities[event.entity] ?: return
-        if(event.target == controller) {
+        if(event.target == InfinityStoneManager.stoneLocations[this])
             event.isCancelled = true
-        }
     }
 
     override fun createItemStack(): ItemStack {

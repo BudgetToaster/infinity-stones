@@ -14,6 +14,9 @@ permissions:
   infinitystones.basic.locate:
     description: "Allows you to locate infinity stones."
     default: true
+  infinitystones.admin.give:
+    description: "Allows you to get an infinity stone."
+    default: op
   infinitystones.admin.whereis:
     description: "Allows you to get the exact location of an infinity stone."
     default: op

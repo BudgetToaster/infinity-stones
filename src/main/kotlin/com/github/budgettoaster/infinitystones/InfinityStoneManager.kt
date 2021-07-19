@@ -18,6 +18,7 @@ import org.bukkit.event.player.PlayerQuitEvent
 import org.bukkit.event.world.ChunkLoadEvent
 import org.bukkit.inventory.ItemStack
 import org.bukkit.inventory.PlayerInventory
+import org.bukkit.scheduler.BukkitRunnable
 import java.io.File
 import java.io.IOError
 import java.util.*
@@ -61,45 +62,6 @@ object InfinityStoneManager : Listener {
         catch(e: IOError) {}
     }
 
-    fun startLocationCheckLoop() {
-        plugin.server.scheduler.scheduleSyncRepeatingTask(plugin, { validateLocations() }, 8, 20)
-    }
-
-    private fun validateLocations() {
-        for(entry in HashSet(stoneLocations.entries)) {
-            val value = entry.value
-            val key = entry.key
-            if(value is HumanEntity) {
-                if(!value.inventory.containsStone(key)) {
-                    stoneLocations.remove(key)
-                }
-            }
-            else if(value is Item) {
-                if(!key.isValid(value.itemStack)) {
-                    stoneLocations.remove(key)
-                }
-            }
-        }
-
-        // new entries
-        for(world in plugin.server.worlds) {
-            for(entity in world.getEntitiesByClasses(Item::class.java, HumanEntity::class.java)) {
-                if(entity is Item) {
-                    val itemStack = entity.itemStack
-                    val type = itemStack.infinityStoneType ?: continue
-                    stoneLocations[type] = entity
-                }
-                else {
-                    entity as HumanEntity
-                    for(itemStack in entity.inventory) {
-                        val type = itemStack.infinityStoneType ?: continue
-                        stoneLocations[type] = entity
-                    }
-                }
-            }
-        }
-    }
-
     // Drop infinity stones on leave
     @EventHandler
     fun onPlayerLeave(ev: PlayerQuitEvent) {
@@ -114,7 +76,7 @@ object InfinityStoneManager : Listener {
     }
 
     //
-    // PREVENT DESTRUCTION
+    // PREVENT OR TRACK DESTRUCTION
     //
 
     @EventHandler
@@ -130,6 +92,7 @@ object InfinityStoneManager : Listener {
         if(entity is Item) {
             val type = entity.itemStack.infinityStoneType ?: return
             stoneLocations.remove(type)
+            save()
         }
     }
 
@@ -143,38 +106,6 @@ object InfinityStoneManager : Listener {
             ev.isCancelled = true
         }
     }
-
-    //
-    // ITEM TRACKING EVENTS
-    //
-
-    @EventHandler
-    fun onItemSpawn(ev: ItemSpawnEvent) {
-        val type = ev.entity.itemStack.infinityStoneType ?: return
-        stoneLocations[type] = ev.entity
-    }
-
-    @EventHandler
-    fun onItemPickup(ev: InventoryPickupItemEvent) {
-        val type = ev.item.itemStack.infinityStoneType ?: return
-        if(ev.inventory.holder is Player) {
-            stoneLocations[type] = ev.inventory.holder as Player
-        }
-        else {
-            ev.isCancelled = true
-        }
-    }
-
-    @EventHandler
-    fun onItemDrop(ev: PlayerDropItemEvent) {
-        val item = ev.itemDrop
-        val stoneType = item.itemStack.infinityStoneType ?: return
-        stoneLocations[stoneType] = item
-    }
-
-    //
-    // PREVENT MOVING TO CONTAINER
-    //
 
     @EventHandler
     fun onItemMove(ev: InventoryMoveItemEvent) {
@@ -209,5 +140,61 @@ object InfinityStoneManager : Listener {
                 }
             }
         }
+    }
+
+    //
+    // ITEM TRACKING EVENTS
+    //
+
+    @EventHandler
+    fun onItemSpawn(ev: ItemSpawnEvent) {
+        val type = ev.entity.itemStack.infinityStoneType ?: return
+        stoneLocations[type] = ev.entity
+        save()
+    }
+
+    @EventHandler
+    fun onChunkLoad(ev: ChunkLoadEvent) {
+        plugin.server.scheduler.scheduleSyncDelayedTask(plugin, {
+            for(entity in ev.chunk.entities) {
+                if(entity is Item) {
+                    val type = entity.itemStack.infinityStoneType ?: continue
+                    stoneLocations[type] = entity
+                    plugin.server.logger.info("Located ${type.friendlyName}.")
+                    save()
+                }
+            }
+        }, 20L)
+    }
+
+    @EventHandler
+    fun onItemPickup(ev: InventoryPickupItemEvent) {
+        val type = ev.item.itemStack.infinityStoneType ?: return
+        if(ev.inventory.holder is Player) {
+            stoneLocations[type] = ev.inventory.holder as Player
+            save()
+        }
+        else {
+            ev.isCancelled = true
+        }
+    }
+
+    @EventHandler
+    fun onItemPickup(ev: EntityPickupItemEvent) {
+        val type = ev.item.itemStack.infinityStoneType ?: return
+        if(ev.entity is Player) {
+            stoneLocations[type] = ev.entity as Player
+            save()
+        }
+        else {
+            ev.isCancelled = true
+        }
+    }
+
+    @EventHandler
+    fun onItemDrop(ev: PlayerDropItemEvent) {
+        val item = ev.itemDrop
+        val stoneType = item.itemStack.infinityStoneType ?: return
+        stoneLocations[stoneType] = item
     }
 }

@@ -14,6 +14,7 @@ object BaseCommand : CommandExecutor {
     fun init() {
         subCommands.add(Locate())
         subCommands.add(WhereIs())
+        subCommands.add(Give())
         for (c in subCommands) {
             if (!c.init()) return
         }
@@ -23,7 +24,7 @@ object BaseCommand : CommandExecutor {
 
     override fun onCommand(sender: CommandSender, command: Command, label: String, args: Array<String>): Boolean {
         val secondaryCommand: String = if (args.isNotEmpty()) args[0].lowercase() else "help"
-        val otherArgs: List<String> = listOf(*args).subList(1, args.size)
+        val otherArgs: List<String> = if(args.isEmpty()) emptyList() else listOf(*args).subList(1, args.size)
 
         for (subCommand in subCommands) {
             if (secondaryCommand != subCommand.label && !subCommand.aliases.contains(secondaryCommand)) continue

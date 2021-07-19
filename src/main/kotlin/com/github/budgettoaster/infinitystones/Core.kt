@@ -21,8 +21,9 @@ class Core: JavaPlugin(), Listener {
             PowerStone, TimeStone, SpaceStone)
 
         BaseCommand.init()
-        InfinityStoneManager.startLocationCheckLoop()
-        InfinityStoneManager.load()
+        server.scheduler.runTaskLater(this, Runnable {
+            InfinityStoneManager.load()
+        }, 1)
         startSaveLoop()
         logger.info("Enabled")
     }
