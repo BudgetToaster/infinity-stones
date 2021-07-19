@@ -45,7 +45,8 @@ object SoulStone: Listener, InfinityStone {
             event.damage *= 0.667
     }
 
-    fun save(dataFile: File = File(plugin.dataFolder, "soulStones.json")) {
+    fun save() {
+        val dataFile = File(plugin.dataFolder, "soulStones.json")
         dataFile.createNewFile()
         if(dataFile.readText().isEmpty()) dataFile.writeText("{}")
         val root = mapper.createArrayNode()
