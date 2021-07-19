@@ -4,7 +4,7 @@ plugins {
 }
 
 group 'com.github.budgettoaster.infinitystones'
-version '1.0-alpha'
+version '1.0-beta'
 
 repositories {
     mavenCentral()

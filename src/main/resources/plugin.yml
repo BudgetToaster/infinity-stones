@@ -1,6 +1,6 @@
 main: com.github.budgettoaster.infinitystones.Core
 name: InfinityStones
-version: 1.0-alpha
+version: 1.0-beta
 api-version: 1.17
 description: "Creates infinity stones throughout the multiverse."
 author: BanePig
