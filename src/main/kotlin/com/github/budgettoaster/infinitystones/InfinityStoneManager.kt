@@ -22,6 +22,7 @@ import org.bukkit.scheduler.BukkitRunnable
 import java.io.File
 import java.io.IOError
 import java.util.*
+import kotlin.collections.ArrayList
 import kotlin.collections.HashMap
 import kotlin.collections.HashSet
 
@@ -60,6 +61,17 @@ object InfinityStoneManager : Listener {
             }
         }
         catch(e: IOError) {}
+    }
+
+    init {
+        plugin.server.scheduler.scheduleSyncRepeatingTask(plugin, {
+            for(entry in HashSet(stoneLocations.entries)) {
+                if (entry.value !is Item) continue
+                if(!entry.value.isValid && entry.value.location.chunk.isLoaded) {
+                    stoneLocations.remove(entry.key)
+                }
+            }
+        }, 20L, 20L)
     }
 
     // Drop infinity stones on leave
